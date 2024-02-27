@@ -24,21 +24,27 @@ cache:
 # 프로젝트 내에 권한이 추가된 gradlew를 활용하여 clean, build를 진행한다.
 script: "./gradlew clean build"
 
+# Travis CI에서 Build한 Jar 파일을 S3에 올리는 과정
+# Travis는 디렉토리 단위로만 업로드 가능하다
 before_deploy:
-  - zip -r resume *
-  - mkdir -p deploy
-  - mv resume.zip deploy/resume.zip
+  - mkdir -p before-deploy # 디렉토리 생성
+  - cp build/libs/*.jar before-deploy/ # 배포에 필요한 파일만 꼽아서 복사 (executable jar)
+  - cd before-deploy && zip -r resume *
+  - cd ../ && mkdir -p deploy
+  - mv resume.zip deploy/resume.zip # 파일 위치 옮기기
 
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
-    bucket: lala9663
+    bucket: my-springboot-build
     region: ap-northeast-2
     skip_cleanup: true
     acl: private
     local_dir: deploy
     wait-until-deployed: true
+    on:
+      branch: main
 
 # CI 실행 완료 시 작성한 이메일로 알람
 notifications:
