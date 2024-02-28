@@ -1,4 +1,4 @@
-# 언어와 jdk의 버전을 지정한다.
+# 언어와 jdk의 버전
 language: java
 jdk:
   - openjdk17
