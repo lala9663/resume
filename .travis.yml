@@ -4,7 +4,6 @@ jdk:
   - openjdk17
 
 # 어느 브랜치가 push 될 때 수행할지 지정한다.
-# 오직 main 브랜치가 push될 때 수행하도록 지정하였다.
 branches:
   only:
     - main
@@ -30,6 +29,7 @@ before_deploy:
   - zip -r resume *
   - mkdir -p deploy
   - mv resume.zip deploy/resume.zip
+  
 #  - mkdir -p before-deploy # 디렉토리 생성
 #  - cp build/libs/*.jar before-deploy/ # 배포에 필요한 파일만 꼽아서 복사 (executable jar)
 #  - cd before-deploy && zip -r resume *
